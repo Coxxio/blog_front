@@ -2,12 +2,21 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchPost = createAsyncThunk('Post/fetchPost', async (data, { rejectWithValue }) => {
+    if (!data){
         return await axios.get(`post/`)
-            .then((response) => {
-                return [...response.data];
-            }).catch((err) => {
-                return rejectWithValue(err);
-            });
+        .then((response) => {
+            return [...response.data];
+        }).catch((err) => {
+            return rejectWithValue(err);
+        });
+    }
+    return await axios.get(`post?category=${data}`)
+    .then((response) => {
+        return [...response.data];
+    }).catch((err) => {
+        return rejectWithValue(err);
+    });
+
 })
 
 export const getOnePost = createAsyncThunk('Post/getPost', async (id, { rejectWithValue }) => {

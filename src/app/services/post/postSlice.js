@@ -24,11 +24,11 @@ const PostSlice = createSlice({
   reducers: {
     setNewIndex: (state, action) => {
       state.index = action.payload;
-      state.next = state.post_list[action.payload + 1]
-        ? state.post_list[action.payload + 1].id
-        : null;
-      state.previous = state.post_list[action.payload - 1]
+      state.next = state.post_list[action.payload - 1]
         ? state.post_list[action.payload - 1].id
+        : null;
+      state.previous = state.post_list[action.payload + 1]
+        ? state.post_list[action.payload + 1].id
         : null;
     },
   },
