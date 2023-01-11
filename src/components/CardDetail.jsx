@@ -3,18 +3,21 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { Button, CardHeader } from "@mui/material";
+import { Button, CardHeader, IconButton } from "@mui/material";
 import * as dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPost, getOnePost } from "../app/services/post/postThunk";
+import { getOnePost } from "../app/services/post/postThunk";
 import { setNewIndex } from "../app/services/post/postSlice";
 import {
   ArrowCircleLeftOutlined,
   ArrowCircleRightOutlined,
+  Delete,
+  Edit,
 } from "@mui/icons-material";
+import DeletePost from "./modalDetelePost";
 
-export default function CardDetail() {
+export default function CardDetail({ user }) {
   const index = useSelector((state) => state.post.index);
   const next = useSelector((state) => state.post.next);
   const previous = useSelector((state) => state.post.previous);
@@ -24,7 +27,7 @@ export default function CardDetail() {
   const { id } = useParams();
 
   React.useEffect(() => {
-    dispatch(fetchPost());
+    // dispatch(fetchPost());
     dispatch(getOnePost(id));
   }, [dispatch, id, index]);
 
@@ -37,6 +40,10 @@ export default function CardDetail() {
     await dispatch(setNewIndex(index - 1));
     navigate(`/post/${next}`);
   };
+
+  const deletePost = () => {
+    
+  }
   return (
     <Box>
       <Box
@@ -48,15 +55,25 @@ export default function CardDetail() {
             <ArrowCircleLeftOutlined />
             Next
           </Button>
-        ) : <div></div>}
+        ) : (
+          <div></div>
+        )}
         {previous ? (
           <Button size="large" onClick={GoPrevious}>
             Previous
             <ArrowCircleRightOutlined />
           </Button>
-        ) : <div></div>}
+        ) : (
+          <div></div>
+        )}
       </Box>
       <Card variant="outlined" sx={{ minWidth: 275 }}>
+        <Box sx={{ position: "fixed", right: 20, top: 120 }}>
+          <IconButton>
+            <Edit />
+          </IconButton>
+            <DeletePost post_actual={post_actual}/>
+        </Box>
         <CardHeader
           title={post_actual.title}
           subheader={

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 
 export default function useData() {
@@ -13,6 +14,7 @@ export default function useData() {
   const saveData = (userData) => {
     sessionStorage.setItem("jwt", JSON.stringify(userData.jwt));
     sessionStorage.setItem("user_blog", JSON.stringify(userData.user));
+    axios.defaults.headers.common = {'Authorization': `Bearer ${userData.jwt}`}
     setData(userData);
   };
 

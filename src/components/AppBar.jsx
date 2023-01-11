@@ -13,6 +13,9 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Outlet, useNavigate } from "react-router-dom";
+import { Fab } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import axios from "axios";
 
 const pages = ["Desarrollo", "Variedades", "Videojuegos", "Vida Diaria"];
 
@@ -29,11 +32,10 @@ function ResponsiveAppBar({ user, setData }) {
   };
 
   const handleCloseNavMenu = (page) => {
-    console.log(page)
+    console.log(page);
     navigate(`posts/${page}`);
     setAnchorElNav(null);
   };
-
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -44,9 +46,14 @@ function ResponsiveAppBar({ user, setData }) {
     navigate("/");
   };
 
+  const handleCreatePost = () => {
+    navigate("/new_post");
+  };
+
   const handleRedirectLogout = () => {
     sessionStorage.clear();
     handleCloseUserMenu();
+    axios.defaults.headers.common = {'Authorization': ``}
     navigate("/miblog/admin");
   };
 
@@ -104,7 +111,10 @@ function ResponsiveAppBar({ user, setData }) {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={(e) => handleCloseNavMenu(page, e)}>
+                  <MenuItem
+                    key={page}
+                    onClick={(e) => handleCloseNavMenu(page, e)}
+                  >
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
@@ -170,6 +180,18 @@ function ResponsiveAppBar({ user, setData }) {
                     <Typography textAlign="center">Logout</Typography>
                   </MenuItem>
                 </Menu>
+                <Box
+                  sx={{
+                    "& > :not(style)": { m: 1 },
+                    position: "fixed",
+                    bottom: 20,
+                    right: 20,
+                  }}
+                >
+                  <Fab color="primary" aria-label="add" onClick={handleCreatePost}>
+                    <AddIcon />
+                  </Fab>
+                </Box>
               </Box>
             ) : null}
           </Toolbar>

@@ -39,13 +39,10 @@ const PostSlice = createSlice({
       })
       .addCase(fetchPost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        if (action.payload.count >= 0) {
-          state.post_list = action.payload.results;
-          state.total_post = action.payload.count;
-        } else {
-          state.post_list = action.payload;
-        }
-      })
+        console.log(action.payload)
+        state.post_list = action.payload.posts;
+        state.total_post = Math.ceil(action.payload.total / 5);
+})
       .addCase(fetchPost.rejected, (state, action) => {
         state.status = "failed";
       })
