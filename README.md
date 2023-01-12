@@ -6,6 +6,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+## installing
+### npm install
+
+
+## Seting Variables
+copy .env and add your enviroment variables
+
 ### `npm start`
 
 Runs the app in the development mode.\
