@@ -3,10 +3,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Button, MenuItem, TextField } from "@mui/material";
 import { Container } from "@mui/system";
-import { useDispatch } from "react-redux";
-import { postPost } from "../app/services/post/postThunk";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getOnePost, postPost, putPost } from "../app/services/post/postThunk";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { setNewPost } from "../app/services/post/postSlice";
 
 const category = [
   { value: "Desarrollo", label: "Desarrollo" },
@@ -21,38 +22,61 @@ const initialState = {
   content: "",
 };
 export default function CreatePost({ user }) {
-  const [form, setForm] = React.useState(initialState);
+  const post_actual = useSelector((state) => state.post.post_actual);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   React.useEffect(() => {
     if (!user) {
       navigate("/");
     }
-  });
+    if (id) {
+      dispatch(getOnePost(id));
+    } else {
+      dispatch(setNewPost(initialState));
+    }
+  }, [dispatch, navigate, id, user]);
   const handleChange = (ev) => {
-    console.log(ev.target.name);
-    setForm({ ...form, [ev.target.name]: ev.target.value });
+    dispatch(setNewPost({ ...post_actual, [ev.target.name]: ev.target.value }));
   };
   const handleSubmit = async (ev) => {
     ev.preventDefault();
-    await dispatch(postPost(form))
-      .then((res) => {
-        console.log(res);
-        toast.success(res.payload, {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+    if (!id) {
+      await dispatch(postPost(post_actual))
+        .then((res) => {
+          toast.success(res.payload, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          navigate("/");
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    } else {
+      await dispatch(putPost(post_actual))
+        .then((res) => {
+          toast.success(res.payload.message, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          navigate(`/post/${post_actual.id}`);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
   return (
     <div>
@@ -75,7 +99,7 @@ export default function CreatePost({ user }) {
               name="title"
               label="Titulo del Post"
               variant="outlined"
-              value={form.title}
+              value={post_actual.title}
               onChange={handleChange}
             />
             <TextField
@@ -83,7 +107,7 @@ export default function CreatePost({ user }) {
               name="resume"
               label="Resumen del Post"
               variant="outlined"
-              value={form.resume}
+              value={post_actual.resume}
               onChange={handleChange}
             />
             <TextField
@@ -91,7 +115,7 @@ export default function CreatePost({ user }) {
               select
               name="category"
               label="Select"
-              defaultValue={form.category}
+              defaultValue={post_actual.category}
               helperText="Por favor seleccione categoria del post"
               onChange={handleChange}
             >
@@ -109,14 +133,14 @@ export default function CreatePost({ user }) {
             placeholder="Contenido"
             multiline
             fullWidth
-            value={form.content}
+            value={post_actual.content}
             onChange={handleChange}
           />
           <Box
             sx={{ display: "flex", justifyContent: "right", padding: "5px" }}
           >
             <Button variant="outlined" size="large" type="submit">
-              Crear
+              {id ? "Editar" : "Crear"}
             </Button>
           </Box>
         </Box>

@@ -31,6 +31,9 @@ const PostSlice = createSlice({
         ? state.post_list[action.payload + 1].id
         : null;
     },
+    setNewPost: (state, action) => {
+      state.post_actual = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -39,10 +42,9 @@ const PostSlice = createSlice({
       })
       .addCase(fetchPost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        console.log(action.payload)
         state.post_list = action.payload.posts;
         state.total_post = Math.ceil(action.payload.total / 5);
-})
+      })
       .addCase(fetchPost.rejected, (state, action) => {
         state.status = "failed";
       })
@@ -89,6 +91,6 @@ const PostSlice = createSlice({
   },
 });
 
-export const { setNewIndex, searchIndex } = PostSlice.actions;
+export const { setNewIndex, setNewPost } = PostSlice.actions;
 
 export default PostSlice.reducer;

@@ -31,8 +31,7 @@ function ResponsiveAppBar({ user, setData }) {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = (page) => {
-    console.log(page);
+  const handleCloseNavMenu = async (page) => {
     navigate(`posts/${page}`);
     setAnchorElNav(null);
   };
@@ -45,7 +44,10 @@ function ResponsiveAppBar({ user, setData }) {
     handleCloseUserMenu();
     navigate("/");
   };
-
+  const handleRedirectMetrics = () => {
+    handleCloseUserMenu();
+    navigate("/analitics");
+  };
   const handleCreatePost = () => {
     navigate("/new_post");
   };
@@ -175,6 +177,9 @@ function ResponsiveAppBar({ user, setData }) {
                 >
                   <MenuItem onClick={handleRedirectDash}>
                     <Typography textAlign="center">Dashboard</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleRedirectMetrics}>
+                    <Typography textAlign="center">Metrics</Typography>
                   </MenuItem>
                   <MenuItem onClick={handleRedirectLogout}>
                     <Typography textAlign="center">Logout</Typography>

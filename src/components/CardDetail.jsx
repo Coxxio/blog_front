@@ -12,7 +12,6 @@ import { setNewIndex } from "../app/services/post/postSlice";
 import {
   ArrowCircleLeftOutlined,
   ArrowCircleRightOutlined,
-  Delete,
   Edit,
 } from "@mui/icons-material";
 import DeletePost from "./modalDetelePost";
@@ -41,9 +40,10 @@ export default function CardDetail({ user }) {
     navigate(`/post/${next}`);
   };
 
-  const deletePost = () => {
-    
-  }
+  const handleEdit = async () => {
+    navigate(`/post/edit/${post_actual.id}`);
+  };
+
   return (
     <Box>
       <Box
@@ -68,12 +68,14 @@ export default function CardDetail({ user }) {
         )}
       </Box>
       <Card variant="outlined" sx={{ minWidth: 275 }}>
-        <Box sx={{ position: "fixed", right: 20, top: 120 }}>
-          <IconButton>
-            <Edit />
-          </IconButton>
-            <DeletePost post_actual={post_actual}/>
-        </Box>
+        {user ? (
+          <Box sx={{ position: "fixed", right: 20, top: 120 }}>
+            <IconButton onClick={handleEdit}>
+              <Edit />
+            </IconButton>
+            <DeletePost post_actual={post_actual} />
+          </Box>
+        ) : null}
         <CardHeader
           title={post_actual.title}
           subheader={

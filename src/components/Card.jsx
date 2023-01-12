@@ -8,17 +8,19 @@ import * as dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { setNewIndex } from "../app/services/post/postSlice";
 import { useNavigate } from "react-router-dom";
+import { postPostClicked } from "../app/services/metrics/metricsThunk";
 
 export default function OutlinedCard({ post, index }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const setNextPrevious = async () => {
+    await dispatch(postPostClicked({post_title:post.title, post_category:post.category}))
     await dispatch(setNewIndex(index));
     navigate(`/post/${post.id}`)
   }
   return (
-    <Box>
+    <Box sx={{ paddingTop: 5}}>
       <Card variant="outlined" sx={{ minWidth: 275 }}>
         <CardHeader
           title={post.title}

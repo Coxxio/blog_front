@@ -6,6 +6,7 @@ import CardDetail from "./components/CardDetail";
 import { ToastContainer } from "react-toastify";
 import useData from "./utils/hooks/useData";
 import CreatePost from "./components/createPost";
+import Metrics from "./pages/metrics";
 function App() {
   const { data, setData } = useData();
   return (
@@ -19,12 +20,20 @@ function App() {
             element={<CardDetail user={data.user}/>}
           />
           <Route
+            path="/post/edit/:id"
+            element={<CreatePost user={data.user}/>}
+          />
+          <Route
             path="/posts/:category"
             element={<Dashboard />}
           />
           <Route
             path="/new_post"
-            element={<CreatePost user={data.user}/>}
+            element={<CreatePost user={data.user} />}
+          />
+           <Route
+            path="/analitics"
+            element={<Metrics user={data.user}/>}
           />
         </Route>
       </Routes>

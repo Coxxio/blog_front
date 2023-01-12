@@ -5,7 +5,8 @@ import OutlinedCard from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPost } from "../app/services/post/postThunk";
 import { useParams } from "react-router-dom";
-import { Pagination } from "@mui/material";
+import { Box, Pagination } from "@mui/material";
+import { postPostClicked } from "../app/services/metrics/metricsThunk";
 
 export default function Dashboard() {
   const [page, setPage] = useState(1);
@@ -19,9 +20,9 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    console.log(category);
     if (category) {
       dispatch(fetchPost({ category, page, limit: 5 }));
+      dispatch(postPostClicked({ post_category: category }));
     } else {
       dispatch(fetchPost({ page, limit: 5 }))
         .then((res) => {})
@@ -39,12 +40,14 @@ export default function Dashboard() {
         {posts_list.map((post, index) => {
           return <OutlinedCard key={post.id} post={post} index={index} />;
         })}
-        <Pagination
-          count={total_post}
-          color="primary"
-          variant="outlined"
-          onChange={changePage}
-        />
+        <Box sx={{ display: "flex", justifyContent: "center", padding: 5 }}>
+          <Pagination
+            count={total_post}
+            color="primary"
+            variant="outlined"
+            onChange={changePage}
+          />
+        </Box>
       </Container>
     </Fragment>
   );
